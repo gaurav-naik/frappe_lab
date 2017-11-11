@@ -1,0 +1,19 @@
+{% macro render_tile(title, data) %}
+	{{ frappe.render_template("frappe_lab/frappe_lab/page/crm_dash/crm_dashboard_tile.html", {"data": data, "title": title }) }}
+{% endmacro %}
+
+<div class="crm-dashboard">
+	<table class="table">
+		<tbody>
+			<tr>
+				<td>
+					{{ render_tile("Leads", data.leads) }}
+				</td>
+				<td>
+					{{ render_tile("Opportunities", data.opportunities) }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
