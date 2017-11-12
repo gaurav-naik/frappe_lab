@@ -1,7 +1,7 @@
 import frappe
 
 @frappe.whitelist()
-def get_crm_dash_data(from_date, to_date):
+def get_crm_dash_data(from_date, to_date, campaign):
 	data =  {
 		"leads": [
 			{"status":"Converted", "count":20, "percent":"50%"},
@@ -16,12 +16,11 @@ def get_crm_dash_data(from_date, to_date):
 		]
 	}
 
-	html = "Problem"
+	html = ""
 
 	try:
 		html = frappe.render_template("frappe_lab/frappe_lab/page/crm_dash/crm_dashboard.html", {"data": data})
 	except Exception as e:
-		for x in xrange(1,10):
-			print ("FAILED", e)
+		frappe.throw("Could not create data output. Reason: {0}".format(e))
 
 	return html
