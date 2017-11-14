@@ -1,18 +1,55 @@
 import frappe
+from collections import OrderedDict
 
 @frappe.whitelist()
-def get_crm_dash_data(from_date, to_date, campaign):
+def get_crm_dash_data(from_date, to_date, campaign=None):
 	data =  {
 		"leads": [
-			{"status":"Converted", "count":20, "percent":"50%"},
-			{"status":"Lost", "count":12, "percent":"12%"},
-			{"status":"Converted", "count":50, "percent":""},
+			OrderedDict([
+				("status", "New"),
+				("count", 20),
+				("percent", "20%"),
+			]),
+			OrderedDict([
+				("status", "Lost"),
+				("count", 50),
+				("percent", "50%"),
+			]),
+			OrderedDict([
+				("status", "Converted"),
+				("count", 30),
+				("percent", "30%"),
+			])
 		],
 		"opportunities": [
-			{"status":"Quotation", "count":35, "percent":"50%", "zfoo":"bar"},
-			{"status":"Lost", "count":12, "percent":"12%", "zfoo":"bar"},
-			{"status":"Converted", "count":50, "percent":"", "zfoo":"bar"},
-			{"status":"Derezzed", "count":50, "percent":"", "zfoo":"bar"},
+			OrderedDict([
+				("rank", "Colonel"),
+				("status", "Quotation"),
+				("count", 35),
+				("percent", "35%"),
+				("foo", "bar"),
+			]),
+			OrderedDict([
+				("rank", "Major"),
+				("status", "Lost"),
+				("count", 35),
+				("percent", "35%"),
+				("foo", "bar"),
+			]),
+			OrderedDict([
+				("rank", "Sergeant Major"),
+				("status", "Converted"),
+				("count", 35),
+				("percent", "35%"),
+				("foo", "bar"),
+			]),
+			OrderedDict([
+				("rank", "Lance Corporal"),
+				("status", "Passive"),
+				("count", 30),
+				("percent", "30%"),
+				("foo", "bar"),
+			])
 		]
 	}
 

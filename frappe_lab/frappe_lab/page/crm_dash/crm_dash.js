@@ -21,12 +21,10 @@ frappe.CRMDash = Class.extend({
 			fieldname: "from_date",
 			label: __("From Date"),
 			reqd: 1,
-			default: frappe.datetime.get_today();
+			default: frappe.datetime.get_today(),
 			input_css: {"z-index": 1},
 			change: function() {
-				if (this && this.$input && this.$input.is(":focus")) {						
-					me.get_data();
-				}
+				me.get_data();
 			},
 		});
 
@@ -35,12 +33,10 @@ frappe.CRMDash = Class.extend({
 			fieldname: "to_date",
 			label: __("To Date"),
 			reqd: 1,
-			default: frappe.datetime.get_today();
+			default: frappe.datetime.get_today(),
 			input_css: {"z-index": 1},
 			change: function() {
-				if (this && this.$input && this.$input.is(":focus")) {						
-					me.get_data();
-				}
+				me.get_data();
 			},
 		});	
 
@@ -48,11 +44,10 @@ frappe.CRMDash = Class.extend({
 			fieldtype: "Link",
 			fieldname: "campaign",
 			label: __("Campaign"),
+			options: "Campaign",
 			input_css: {"z-index": 1},
 			change: function() {
-				if (this && this.$input && this.$input.is(":focus")) {						
-					me.get_data();
-				}
+				me.get_data();
 			},
 		});
 
@@ -60,17 +55,22 @@ frappe.CRMDash = Class.extend({
 	},
 	get_data: function() {
 		var me = this;
+
+		if (!me.page.fields_dict["from_date"].get_value() || !me.page.fields_dict["to_date"].get_value()) return
+
 		frappe.call({
 			method: "frappe_lab.frappe_lab.page.crm_dash.crm_dash.get_crm_dash_data",
 			args: {
 				"from_date": me.page.fields_dict["from_date"].get_value(),
 				"to_date": me.page.fields_dict["to_date"].get_value(),
-				"campaign": me.page.fields_dict["campaign"].get_value()
+				"campaign": (me.page.fields_dict["campaign"].get_value() || "")
 			}
 		}).done((r) => {
+			console.log("Reloaded")
+			me.page.wrapper.find('.crm-dashboard').remove()
 			me.page.main.append(r.message)
-		}).fail((reason) => {
-			frappe.show_alert("Could not load data. <br/>" + reason);
+		}).fail(() => {
+			frappe.show_alert("Could not load data.");
 		})
 	}
 })
